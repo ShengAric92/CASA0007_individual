@@ -1,0 +1,333 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[newfloat]{minted}
+\usepackage{caption}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{hyperref}
+\usepackage{indentfirst}
+\usepackage{multirow}
+
+
+
+\newenvironment{code}{\captionsetup{type=listing}}{}
+\SetupFloatingEnvironment{listing}{name=Listing}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\title{CASA0007: Quantitative Methods\\ Assessing the Various Factors Affecting Life Expectancy: A Case Study of London at the Ward Level in 2013}
+\author{Student ID: 23207968}
+\date{16/01/2024}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\maketitle
+
+%%% Introduction
+\section*{1. Introduction}
+In recent years, an increasing number of researchers have been drawn to the topic of life expectancy. Roser and his collaborators (2013) have studied the global trends in life expectancy and the factors influencing these trends.  They have also engaged in discussions on more in-depth topics, such as the gender disparities in life expectancy and the inequalities in lifespan within countries. Crimmins' study (2021) analyzed the differences in life expectancy brought about by the COVID-19 pandemic and the resultant socioeconomic inequalities. Mackenbach's study (2019) focuses on the entirety of European countries, discussing which determinants significantly impact the socioeconomic inequalities in life expectancy. These studies share a common thread in exploring the factors that influence life expectancy, identifying which factors have a more significant impact, and understanding their interconnections with life expectancy. Life expectancy is a complex metric affected by a multitude of variables across different fields. The study of life expectancy is crucial for gaining insights into society's overall health and welfare. This interdisciplinary research builds bridges across various fields, aiding urban planners, social scientists, and government officials to understand the world's development and changes better. It informs policy-making, aiming to enhance the quality of life for people and shape a better world.
+
+Inspired by this literature, we selected London as a case study, employing quantitative methods to answer our research question: `How do various factors affect London's life expectancy in 2013, and which of these factors have a more significant impact?' Additionally, we aim to establish a multiple regression model for prediction. We focused our research on data from a decade ago because older datasets offer complete, accurate data and richer dimensions, making the analysis more reliable. Furthermore, this approach allows us to understand history better, which aids in predicting the future. More importantly, our research can provide a foundation and stepping stone for future scholars. They can conduct comparative analyses to explore more patterns and validate and critically evaluate our findings, thereby strengthening the field of study.
+
+The structure of our research is as follows: Chapter 2 introduces how we collected data, including some literature references, an overview of the datasets accessed, and a summary of the variables used. Chapter 3 details the core methodologies employed, which include correlation analysis and multiple linear regression. Chapter 4 presents the results we obtained, and includes discussion and analysis based on these findings. Chapter 5 summarises our entire study and discusses future prospects.
+
+
+
+
+
+%%% Data
+\section*{2. Data}
+We first need to collect data to explore what factors would have influenced London's life expectancy at the ward level a decade ago. We need to collect the life expectancy for each London ward in 2013 as the response variable. Then, we need to carefully consider the various factors that might affect life expectancy and collect the corresponding data. Both intuitively and based on scientific research, health has always been an essential factor influencing lifespan (Li et al., 2018). Regarding health, we can calculate the proportion of the healthy population in each London ward in 2013. Many other factors concerning life expectancy, such as the economy, social stability, and natural environment, are also frequently studied by various researchers. For example, Mariani's article (2010) demonstrates the mutual influence between the environment and lifespan. Schwandt's article (2022) examines the association between income and life expectancy before and after the COVID-19 pandemic. Furthermore, in Chan's article (2015), the author also emphasises the importance of demographic variables.
+
+The Greater London Authority released two comprehensive datasets in 2014 (London Datastore, 2014). The first, The Ward Profiles and Ward Atlas, offers detailed demographic and related data for each ward in Greater London, providing snapshots of the population with information on population size, diversity, households, life expectancy, crime rates, unemployment rates, and more. The second dataset focuses on the wellbeing score in London for 2013, also featuring extensive demographic data for each ward.
+
+We primarily accessed these two datasets, as well as the 2011 London Census data (London Datastore, 2013), and ultimately selected some suitable variables based on these datasets and various references to construct the data table for our study. Each row in the table represents a London ward, namely, each observation. There are 625 wards. Each column denotes different variables. Table \ref{tab: 2.1} provides a summary of the variable type and data type for each variable used.
+
+One of the explanatory variables is complex, `\% homes with access to open space, nature, and \% of green space', reflecting whether people in the area lack contact with nature. In the data table, this variable has been scored; a higher score indicates better nature accessibility and more open space in that ward. Furthermore, in subsequent analysis, this variable is abbreviated as `open space'.
+
+Figure \ref{fig: 2.1} shows the box plots for each variable, clearly displaying the median (orange bar) and the upper and lower quartiles, whether the distribution is skewed, and the presence of any outliers (red cross). We also utilized Q-Q plots to examine the distribution of each variable (see Figure \ref{fig: 2.2}). Combining the insights from Figures \ref{fig: 2.1} and \ref{fig: 2.2}, we found that the variables including \% with no qualifications, \% providing no unpaid care, \% of healthy residents, open space, and life expectancy are normally distributed. Furthermore, although our dataset does not contain type 1 outliers, namely errors, there may be many type 2 and type 3 outliers (except for the variable \% providing no unpaid care). Therefore, in the data preprocessing stage, we retained all data. Based on the quantitative methods we subsequently chose to use, we can further decide whether to retain or remove other outliers and consider whether to apply transformations to the data.
+
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{\begin{tabular}[c]{@{}l@{}}Variable\\ index\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Variable\\ name\end{tabular}}                                                      & \textbf{\begin{tabular}[c]{@{}l@{}}Variable\\ type\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Level of\\ measurement\end{tabular}} \\ \hline
+1                                                                 & Population density                                                                                                    & Explanatory                                                      & Ratio                                                                   \\ \hline
+2                                                                 & Median household income                                                                                               & Explanatory                                                      & Ratio                                                                   \\ \hline
+3                                                                 & Unemployment rate                                                                                                     & Explanatory                                                      & Ratio                                                                   \\ \hline
+4                                                                 & Crime rate                                                                                                            & Explanatory                                                      & Ratio                                                                   \\ \hline
+5                                                                 & \% with no qualifications                                                                                             & Explanatory                                                      & Ratio                                                                   \\ \hline
+6                                                                 & \% providing no unpaid care                                                                                           & Explanatory                                                      & Ratio                                                                   \\ \hline
+7                                                                 & \% healthy resident                                                                                                   & Explanatory                                                      & Ratio                                                                   \\ \hline
+8                                                                 & \begin{tabular}[c]{@{}l@{}}\% homes with access to open\\  spaces and nature \& \% green\\ space (score)\end{tabular} & Explanatory                                                      & Interval                                                                \\ \hline
+9                                                                 & Life expectancy                                                                                                       & Response                                                         & Ratio                                                                   \\ \hline
+\end{tabular}
+\caption[]{
+The summary table of variable types and data types for the variables used.
+}
+\label{tab: 2.1}
+\end{table}
+
+
+\begin{figure}\begin{center}
+\includegraphics[width=1\columnwidth]{qm_21.png}
+\end{center}
+\caption[]{
+The box plots for all variables.
+}
+\label{fig: 2.1}
+\end{figure}
+
+
+\begin{figure}\begin{center}
+\includegraphics[width=0.55\columnwidth]{qm_22.png}
+\end{center}
+\caption[]{
+The Q-Q plots for all variables.
+}
+\label{fig: 2.2}
+\end{figure}
+
+
+
+
+
+\section*{3. Methodology}
+
+\subsection*{3.1 Correlation analysis}
+We can first conduct a correlation analysis on all variables to explore whether there is a linear association between them. Since the level of measurement for all our variables is either ratio or interval, we can calculate the sample Pearson correlation coefficient for each pair of variables and obtain a sample correlation matrix. The entries of this $k \times k$ matrix are given by:
+\begin{equation*}
+r_{i j}=\frac{\operatorname{cov}\left(v_i, v_j\right)}{\operatorname{sd}\left(v_i\right) * \operatorname{sd}\left(v_j\right)}=\frac{\sum_{l=1}^n\left(v_{i_l}-\bar{v}_i\right)\left(v_{j_l}-\bar{v}_j\right)}{\sqrt{\sum_{l=1}^n\left(v_{i_l}-\bar{v}_i\right)^2} \sqrt{\sum_{l=1}^n\left(v_{j_l}-\bar{v}_j\right)^2}}, \quad \text { for } i, j \in\{1,2, \ldots, k\},
+\end{equation*}
+where $i, j$ are the index of the variable, $n$ is the sample size, and $k$ is the number of variables (here $k=9$).
+
+Akoglu's article (2018) have shown that the range of the Pearson correlation coefficient, indicating the strength of linearity, can vary depending on the research field. For our study, which falls under urban and sociological research, we have adopted the measurement standards for the Pearson correlation coefficient as outlined in Table \ref{tab: 3.1}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+$r$     & Direction & $|r|$ & Strength \\ \hline
+$r > 0$ & Positive  & 0 $\sim$0.3    & Weak     \\ \hline
+$r = 0$ & None      & 0.3 $\sim$0.7  & Moderate \\ \hline
+$r < 0$ & Negative  & 0.7 $\sim$1    & Strong   \\ \hline
+\end{tabular}
+\caption[]{
+The direction and strength of the linear relationship interpreted by the Pearson correlation coefficient.
+}
+\label{tab: 3.1}
+\end{table}
+
+
+
+\subsection*{3.2 Multiple linear regression}
+Correlation does not imply causation. To explore which factors significantly affect life expectancy, we established a multiple regression model and used it for prediction. We randomly divided the dataset into two groups, with 80\% of the data as the training set and 20\% as the test set. We initially employed a full model, which includes all explanatory variables:
+\begin{equation*}
+\hat{y}=\beta_0+\beta_1 x_1+\beta_2 x_2+\ldots+\beta_k x_k,
+\end{equation*}
+where $k = 8$. Then, to optimize our model and select features judiciously, we employed backward elimination (Marill \& Green, 1963). This approach begins by including all possible explanatory variables and subsequently removes the least statistically significant ones (checking by p-values), step by step. Additionally, we calculated the adjusted $R^2$, Akaike information criterion (AIC) (Akaike, 2011), and Root Mean Squared Error (RMSE) to assess the quality of the model, which are given by:
+
+\begin{equation*}
+\text { Adjusted } R^2=1-\frac{\left(1-R^2\right)(n-1)}{n-k-1},
+\end{equation*}
+
+\begin{equation*}
+\mathrm{AIC}=2 k-2 \log (\hat{L}),
+\end{equation*}
+
+\begin{equation*}
+\text{RMSE}=\sqrt{\sum_{i=1}^n \frac{\left(\hat{y}_i-y_i\right)^2}{n}},
+\end{equation*}
+where $k$ is the number of explanatory variables, $n$ is the sample size, $\hat{L}$ is the maximum value of the log-likelihood of the model, $y_i$ is the actual response data and $\hat{y}_i$ is the predicted response data.
+
+
+
+
+
+\section*{4. Results and Discussion}
+
+\subsection*{4.1 Correlation analysis results and discussion}
+Figure \ref{fig: 4.1} shows the heat map of the sample correlation matrix, and Figure \ref{fig: 4.2} presents scatter plots of life expectancy against all explanatory variables. We identified 9 pairs of variables with no linear relationship, 7 pairs with a weak linear relationship (3 positives and 4 negatives), 17 pairs with a moderate linear relationship (9 positives and 8 negatives), and 3 pairs with a strong linear relationship (all 3 negative). The open space variable is quite unique, showing no linear association with most variables except population density. The response variable and some explanatory variables, such as median household income, unemployment rate, and \% of healthy residents, have a high linear association. Additionally, several groups of explanatory variables exhibit strong linear correlations, increasing the risk of multicollinearity, which necessitates checking the Variance Inflation Factor (VIF). Furthermore, outliers in these scatter plots followed the pattern, categorized as type 3, and did not require removal.
+\begin{figure}[h]\begin{center}
+\includegraphics[width=.8\columnwidth]{qm_41.png}
+\end{center}
+\caption[]{
+The heat map of the sample correlation matrix.
+}
+\label{fig: 4.1}
+\end{figure}
+
+\begin{figure}[h]\begin{center}
+\includegraphics[width=.8\columnwidth]{qm_42.png}
+\end{center}
+\caption[]{
+The scatter plots of life expectancy vs all explanatory variables.
+}
+\label{fig: 4.2}
+\end{figure}
+
+\subsection*{4.2 Multiple linear regression results and discussion}
+Tables \ref{tab: 4.1} and \ref{tab: 4.2} summarise the statistics of the full model and the final models' statistics, respectively. The full model has a commendable R-squared value of 0.548, indicating that 54.8\% of the variance in the response variable can be explained by the explanatory variables included in the model. This is considered a good performance in sociology, demonstrating good predictive power. Additionally, various residual analysis tests confirm that all linear regression assumptions are satisfied.
+
+However, we noticed that two variables, the unemployment rate, and \% with no qualifications, have exceptionally high p-values, suggesting their impact on life expectancy is insignificant. We sequentially removed the unemployment rate and \% with no qualifications by employing a backward elimination approach. Our final model has a higher adjusted R-squared and a lower AIC while maintaining the same RMSE. This indicates that we successfully managed the trade-off between the goodness of fit and the complexity of the model by reducing variables without affecting the error.
+
+
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+\begin{tabular}[c]{@{}l@{}}Variable\\ index\end{tabular} & Coef     & $P>|t|$ & VIF  & $R^2$: 0.548      \\ \hline
+Intercept                                                & 64.330   & 0.000   & -    & Adj. $R^2$: 0.540 \\ \hline
+1                                                        & 9.04e-05 & 0.000   & 2.62 & F: 74.37          \\ \hline
+2                                                        & 0.0001   & 0.000   & 3.88 & Prob F: 9.83e-80  \\ \hline
+3                                                        & 0.0128   & 0.771   & 4.27 & AIC: 1880         \\ \hline
+4                                                        & -0.0099  & 0.001   & 1.52 & RMSE: 1.467       \\ \hline
+5                                                        & -0.0292  & 0.258   & 4.76 & Rainbow p: 0.67   \\ \hline
+6                                                        & -0.5120  & 0.000   & 2.45 & DW: 1.87          \\ \hline
+7                                                        & 0.6318   & 0.000   & 3.85 & JB p: 0.62        \\ \hline
+8                                                        & 0.0238   & 0.039   & 1.24 & GQ p: 0.63        \\ \hline
+\end{tabular}
+\caption[]{
+The summary statistics of the full model.
+}
+\label{tab: 4.1}
+\end{table}
+
+
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+\begin{tabular}[c]{@{}l@{}}Variable\\ index\end{tabular} & Coef      & $P>|t|$ & VIF  & $R^2$: 0.547                      \\ \hline
+Intercept                                                & 57.278    & 0.000   & -    & Adj. $R^2$: 0.541                 \\ \hline
+1                                                        & 9.786e-05 & 0.000   & 2.40 & F: 99.09                          \\ \hline
+2                                                        & 0.0001    & 0.000   & 2.24 & Prob F: 1.86e-81                  \\ \hline
+4                                                        & -0.0096   & 0.001   & 1.49 & AIC: 1877                         \\ \hline
+6                                                        & -0.4834   & 0.000   & 1.89 & RMSE: 1.467                       \\ \hline
+7                                                        & 0.6693    & 0.000   & 2.89 & Rainbow p: 0.65                   \\ \hline
+8                                                        & 0.0231    & 0.045   & 1.24 & DW: 1.87,  JB p: 0.62, GQ p: 0.63 \\ \hline
+\end{tabular}
+\caption[]{
+The summary statistics of the final model.
+}
+\label{tab: 4.2}
+\end{table}
+
+\section*{5. Conclusions and future outlooks}
+In this case study, we discovered a relatively large linear relationship between life expectancy in the London area in 2013 and health and economic factors, such as median household income, unemployment rate, and \% of healthy residents. This finding is also consistent with previous literature reviews. We also identified two variables in our case study that had an insignificant impact on life expectancy: the unemployment rate and \% with no qualifications. However, potential reasons, such as their high linear correlation with other explanatory variables, might also contribute to their insignificance.
+
+Although our final model boasts a good R-squared and lower complexity, it may still have limitations, as our dataset inherently includes spatial attributes. Neighboring areas might have closer connections, and to improve future studies, we need to consider spatial autocorrelation (Cliff \& Ord, 1970) and may use Spatial Lag Model (Chi \& Zhu, 2008). A broader perspective could involve exploring trends over time or expanding the spatial dimension, such as adopting the Geographically Weighted Regression method used in Qiu's articles (2022) to model different regions across the UK separately.
+
+Total Words: 1732.
+
+Github Link: https://github.com/ShengAric92/CASA0007\_individual
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\clearpage
+
+
+
+
+
+%%%Reference
+\clearpage
+\section*{References}
+\begin{flushleft}
+Akaike, H. (2011). Akaike’s information criterion. \textit{International encyclopedia of statistical science}, 25-25.
+\end{flushleft}
+
+\begin{flushleft}
+Akoglu, H. (2018). User's guide to correlation coefficients. \textit{Turkish journal of emergency medicine, 18}(3), 91-93.
+\end{flushleft}
+
+\begin{flushleft}
+Chan, M. F., \& Kamala Devi, M. (2015). Factors affecting life expectancy: evidence from 1980-2009 data in Singapore, Malaysia, and Thailand. \textit{Asia Pacific Journal of Public Health, 27}(2), 136-146.
+\end{flushleft}
+
+\begin{flushleft}
+Chi, G., \& Zhu, J. (2008). Spatial regression models for demographic analysis. \textit{Population Research and Policy Review, 27}, 17-42.
+\end{flushleft}
+
+\begin{flushleft}
+Cliff, A. D., \& Ord, K. (1970). Spatial autocorrelation: a review of existing and new measures with applications. \textit{Economic Geography, 46}(sup1), 269-292.
+\end{flushleft}
+
+\begin{flushleft}
+Crimmins, E. M. (2021). Recent trends and increasing differences in life expectancy present opportunities for multidisciplinary research on aging. \textit{Nature Aging, 1}(1), 12-13.
+\end{flushleft}
+
+\begin{flushleft}
+Li, Y., Pan, A., Wang, D. D., Liu, X., Dhana, K., Franco, O. H., \& Hu, F. B. (2018). Impact of healthy lifestyle factors on life expectancies in the US population. \textit{Circulation, 138}(4), 345-355.
+\end{flushleft}
+
+\begin{flushleft}
+London Datastore. (2013). \textit{`2011 Census'}, Census information scheme. Available at: https://data.london.gov.uk/census/2011-census/data/ [Accessed on 12 January 2024].
+\end{flushleft}
+
+\begin{flushleft}
+London Datastore. (2014). \textit{`London Ward Well-Being Scores'}, Greater London Authority. Available at: https://data.london.gov.uk/dataset/london-ward-well-being-scores [Accessed on 12 January 2024].
+\end{flushleft}
+
+\begin{flushleft}
+London Datastore. (2014). \textit{`Ward Profiles and Atlas'}, Greater London Authority. Available at: https://data.london.gov.uk/dataset/ward-profiles-and-atlas [Accessed on 12 January 2024].
+\end{flushleft}
+
+\begin{flushleft}
+Mackenbach, J. P., Valverde, J. R., Bopp, M., Brønnum-Hansen, H., Deboosere, P., Kalediene, R., ... \& Nusselder, W. J. (2019). Determinants of inequalities in life expectancy: an international comparative study of eight risk factors. The Lancet Public Health, 4(10), e529-e537.
+\end{flushleft}
+
+\begin{flushleft}
+Mariani, F., Pérez-Barahona, A., \& Raffin, N. (2010). Life expectancy and the environment. \textit{Journal of Economic Dynamics and Control, 34}(4), 798-815.
+\end{flushleft}
+
+\begin{flushleft}
+Marill, T., \& Green, D. (1963). On the effectiveness of receptors in recognition systems. \textit{IEEE transactions on Information Theory, 9}(1), 11-17.
+\end{flushleft}
+
+\begin{flushleft}
+Qiu, X., \& Wu, S. S. (2022). Identifying the most important life expectancy factors for individual US counties. \textit{Applied Geography, 147}, 102786.
+\end{flushleft}
+
+\begin{flushleft}
+Roser, M., Ortiz-Ospina, E., \& Ritchie, H. (2013). Life expectancy. \textit{Our world in data}.
+\end{flushleft}
+
+\begin{flushleft}
+Schwandt, H., Currie, J., Von Wachter, T., Kowarski, J., Chapman, D., \& Woolf, S. H. (2022). Changes in the relationship between income and life expectancy before and during the COVID-19 pandemic, California, 2015-2021. \textit{JAMA, 328}(4), 360-366.
+\end{flushleft}
+
+
+
+
+\end{document}
